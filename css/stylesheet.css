@@ -1,0 +1,151 @@
+.statementLink:active, .statementLink:visited {
+  color: blue;
+}
+.statementLink:hover {
+  color: orangered;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.translationsContainer, .quizContainer, .questionContainer, .resultsContainer {
+  display: none;
+  margin: 0 auto;
+  text-align: center;
+  width: 50%;
+}
+
+.translationsContainer h3, .quizContainer h2, .resultsContainer h2 {
+  margin: 2em 0 0.5em;
+}
+
+.translationsContainer {
+  display: block;
+}
+
+.quizContainer section {
+  display: none;
+}
+
+.questionContainer {
+  border: 1px solid black;
+  min-width: 300px;
+  padding-bottom: 1.5em;
+  text-align: center;
+}
+
+.questionContainerNumber {
+  margin: 5px;
+  padding: 10px;
+  text-align: left;
+}
+
+.translationQuestion {
+  font-size: 2.5em;
+  margin: 30px;
+}
+
+table {
+  border: 1px solid black;
+  border-spacing: 0;
+  margin: auto;
+  text-align: center;
+  width: 32%;
+}
+
+th {
+  background-color: #0059A5;
+  border-bottom: 1px solid #000;
+  color: #FFF;
+  font-size: 1.2em;
+  padding: 0.5em;
+}
+
+tr:nth-of-type(even) {
+  background-color: #eaeaea;
+}
+
+td {
+  height: 1.3em;
+  padding-left: 1.1em;
+  text-align: left;
+}
+
+/* Quiz questions */
+#startQuizBtn, #resetBtn {
+  margin: 30px;
+}
+
+#gradeQuizBtn {
+  margin: 20px auto;
+}
+
+#previousBtn {
+  visibility: hidden;
+}
+
+#userAnswer {
+  width: 50%;
+}
+
+#nextBtn {
+  visibility: visible;
+}
+
+/* Dots used to show which question they are on */
+.emptyDot {
+  background-color: #FFFFFF;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  color: #000000;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+  margin: 10px 5px; 
+  text-decoration: none;
+}
+
+.filledDot {
+  background-color: #032848;
+}
+
+.selectedDot {
+  border: 5px solid #8BBBE6;
+}
+
+.legendBox {
+  display: flex;
+  align-items:center;
+  justify-content: center;
+ }
+
+.resultsContainer table {
+  width: 80%;
+  margin-bottom: 1.1em;
+}
+
+tfoot td {
+  background-color:#0059A5;
+  border-top: 1px solid #000;
+  color: #FFF;
+  font-weight: bold;
+  padding: 0.5em;
+}
+
+.finalGradeText {
+  text-align: right;
+}
+
+.finalGrade {
+  font-size: 1.3em;
+}
+
+footer {
+  margin-top: 2em;
+  text-align: center;
+}

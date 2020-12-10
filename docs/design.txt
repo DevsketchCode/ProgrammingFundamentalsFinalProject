@@ -1,0 +1,460 @@
+
+PROBLEM STATEMENT: 
+  The program will first display a list of 10 translations table to review.  The user would press a start button to start a quiz which would hide the translations and display a 10 questions in a loop allowing the user to enter their answer to the question.  They would click a next button or previous button to show the next or previous question. After the last question, the user would then press a submit button.  This would display the correct answers and if their answer was wrong, it would notify them and display both their answer and the correct one calculate their final grade.
+
+  Nouns: 10 translations, start button, loop, 10 questions, user answer, submit button, correct answers, grade
+
+  Verbs: display, press, hide, show, notify
+
+
+
+DEFINING DIAGRAM: 
+  INPUTS: 
+    userAnswers
+
+  PROCESSING: 
+    Display 10 translations table
+    Press button to start
+    Hide 10 translations table
+    Display 10 questions in a loop
+    Prompt for userAnswers with 10 questions in a loop
+    Show the next or previous question
+    Calculate grade
+    Display the questions in a loop
+    Display the userAnswers in a loop
+    Display the correctAnswers in a loop
+    Display the translationGrade
+    Display finalGrade
+
+  OUTPUTS
+    questions
+    userAnswers
+    correctAnswers
+    translationGrade    
+    finalGrade    
+
+
+
+SOLUTION ALGORITHM:
+
+  ToggleContainerDisplay (containerName, option, displayType)
+    Initialize element to document.getElementById(containerName)
+    Initialize showValue to ""
+    Initialize hideValue to ""
+
+    IF displayType is "display" THEN
+      Set showValue to  "block"
+      Set hideValue to "none"
+    ELSE 
+      Set showValue to  "block"
+      Set hideValue to "none"
+    ENDIF
+
+    IF option is show THEN
+      IF displayType is "display" THEN
+        Set element style display to showValue
+      ELSE
+        Set element style visibility to showValue
+      ENDIF
+    ELSE IF option is hide THEN
+      IF displayType is "display" THEN
+        Set element style display to hideValue
+      ELSE
+        Set element style visibility to hideValue
+      ENDIF
+    ELSE 
+      IF displayType is "display" THEN
+        Set element style display to showValue
+      ELSE
+        Set element style visibility to showValue
+      ENDIF
+    ENDIF
+  END
+
+  SetFocus(inputField)
+    Set document.getElementById(inputField) to SetFocus
+  END
+
+
+  SetDotStyle(questionNumber)
+    Initialize dotNumber to document.getElementById("dot" + questionNumber)
+    Initialize userInput to document.getElementById("userAnswer" + questionNumber)value;
+
+    IF userInput is equal to "" OR userInput is equal to null THEN
+      Set dotNumber.style.border to "1px solid red"
+      Set dotNumber.style.backgroundColor to white
+      Set dotNumber.style.color to black
+    ELSE
+      Set dotNumber.style.border to "1px solid black"
+      Set dotNumber.style.backgroundColor to dark blue 
+      Set dotNumber.style.color to white
+
+    ENDIF
+  END 
+
+
+  SetSelectedDot(questionNumber, numberOfQuestions)
+    Initialize dotElement to ""
+
+    FOR var dotCounter to 1; dotCounter is less than or equal to numberOfQuestions; increment dotCounter
+      Set dotElement to document.getElementById("dot" + dotCounter)
+      IF dotCounter is equal to questionNumber THEN
+        Set dotElement style border to "5px solid light blue
+      ELSE
+        Set dotElement style border width to 1px
+      ENDIF
+    ENDFOR
+  END
+
+
+  PopulateQuestionArray ()
+    Initialize questions as array
+
+    Set questions to "I","Yes","No","Hello","Goodbye","He/She","Thank You","Fine","Happy","Today"
+
+    Return questions
+  END
+
+  PopulateCorrectAnswerArray()
+    Initialize correctAnswers as array
+
+    Set correctAnswers to "Ako","Oo","Hindi","Kumusta","Paalam","Siya","Salamat","Mabuti","Masaya","Ngayon"
+
+    Return correctAnswers
+  END
+
+  BuildQuiz()
+
+    Initialize quizContainerElement to document.getElementById('quizContainer')
+    Initialize quizContainerHTML to ""
+    Initialize translationsContainer to document.getElementById('translationsContainer')
+    Initialize questions as array
+    Initialize successfulBuild to ""
+    Initialize previousBtnVisibility to "visible"
+    Initialize nextBtnVisibility to "visible"
+    Initialize gradeQuizBtnDisplay to "none"
+
+    Set questions to PopulateQuestionArray()
+
+    Call ToggleContainerDisplay('translationsContainer', 'hide')
+    Call ToggleContainerDisplay('quizContainer', 'show')
+
+    IF translationsContainer display is none AND quizContainer display is block THEN 
+
+      FOR questionCounter = 1; questionCounter <= questions.length; increment questionCounter
+        Set quizContainerHTML += "        <section id=\"question" + questionCounter + "\" class=\"questionContainer\">\n          <p class=\"questionContainerNumber\">Question " + (questionCounter) + "</p>\n          <p id=\"translationQuestion\" class=\"translationQuestion\">" + questions[questionCounter-1] + "</p>\n"
+
+        IF questionCounter is greater than 1 THEN
+          Set previousBtnVisibility to visible
+        ELSE
+          Set previousBtnVisibility to hidden
+        ENDIF
+
+        Set quizContainerHTML += "          <button id=\"previousBtn\" name=\"previousBtn\" onclick=\"ToggleContainerDisplay(\'question" + (questionCounter - 1) + "\',\'show\',\'display\'); ToggleContainerDisplay(\'question" + questionCounter + "\',\'hide\',\'display\'); SetFocus(\'userAnswer" + (questionCounter - 1) + "\'); SetDotStyle(" + questionCounter + "); SetSelectedDot(" + (questionCounter - 1) + "," + questions.length + ");\" style=\"visibility: " + previousBtnVisibility + ";\">Previous</button>"
+
+        Set quizContainerHTML += "          <input type=\"text\" id=\"userAnswer" + questionCounter + "\" placeholder=\"Enter your answer here\"  autocomplete=\"off\">"
+
+        IF questionCounter is equal to (questions.length - 1) THEN
+          Set gradeQuizBtnDisplay to " ToggleContainerDisplay(\'gradeQuizBtn\',\'show\',\'display\');"
+        ELSE
+          Set gradeQuizBtnDisplay to ""
+        ENDIF
+
+        Set quizContainerHTML += "          <button id=\"nextBtn\" name=\"nextBtn\" onclick=\"ToggleContainerDisplay(\'question" + (questionCounter + 1) + "\',\'show\',\'display\'); ToggleContainerDisplay(\'question" + questionCounter + "\',\'hide\',\'display\'); SetFocus(\'userAnswer" + (questionCounter + 1) + "\');  SetDotStyle(" + questionCounter + "); SetSelectedDot(" + (questionCounter + 1) + "," + questions.length + ");" + gradeQuizBtnDisplay + "\" style=\"visibility: " + nextBtnVisibility + ";\">Next</button>"
+
+        Set quizContainerHTML += "        </section>"
+
+      ENDFOR
+      
+      FOR (var i = 1; i <= questions.length; increment i) 
+        quizContainerHTML += "<span id=\"dot" + i + "\" class=\"emptyDot\" style=\"display: inline-block;\">" + i + "</span>"
+      ENDFOR
+
+      Set quizContainerHTML += "<span class=\"legendBox\"><span class=\"emptyDot\" style=\"display: inline-block; border: 1px solid #FF0000;\"></span> = Nothing Entered <span class=\"emptyDot filledDot\" style=\"display: inline-block; margin-left: 20px;\"></span> = Has Entry <span class=\"emptyDot selectedDot\" style=\"display: inline-block; margin-left: 20px;\"></span> = Selected Question</span>"
+
+      Set quizContainerHTML += "        <button id=\"gradeQuizBtn\" name=\"submitBtn\" onclick=\"GradeQuiz();\">Grade Quiz</button>"
+
+      Set quizContainerElement.innerHTML += quizContainerHTML
+      Set successfulBuild to Yes
+      
+    ELSE
+      Set successfulBuild to No
+    ENDIF
+
+    IF successfulBuild is Yes THEN
+      ToggleContainerDisplay('question1', 'show', 'display')
+      Call SetFocus('userAnswer1')
+      Call SetSelectedDot(1, questions.length)
+    ELSE IF (successfulBuild === "No") {
+      Alert user with "We're sorry, the correct sections have not been displayed properly. Please try again later."
+    ELSE
+      Alert user with "We're sorry, there was an error building your quiz at this time. Please try again later."
+    ENDIF
+  END
+
+  PopulateUserAnswers()
+    Initialize questions as array
+    Initialize userAnswers as array
+    Initialize elementValue as ""
+
+    Call PopulateQuestionArray() and Set to questions
+
+    FOR (var i = 1; i <= questions.length; i++) 
+      IF (document.getElementById('userAnswer' + i).value == null) THEN
+        Set elementValue to ""
+      ELSE
+        Set elementValue to (document.getElementById('userAnswer' + i).value)
+      ENDIF
+      userAnswers.push(elementValue);
+    ENDFOR
+  
+    return userAnswers;
+  END
+
+  GradeUserAnswer (userAnswer, correctAnswer)
+    Initialize isCorrect to FALSE
+    IF userAnswer.toLowerCase().trim() is equal to correctAnswer.toLowerCase().trim() THEN
+      Set isCorrect to TRUE
+    END
+    Return isCorrect
+  END
+
+  GradeQuiz ()
+
+    Initialize questions as array
+    Initialize questionNumber as 0
+    Initialize userAnswers as array
+    Initialize correctAnswers as array
+    Initialize isCorrect as TRUE
+    Initialize isCorrectText as ""
+    Initialize fontColor to black
+    Initialize translationGrade to 0
+    Initialize finalGrade to 0
+    Initialize quizContainer to document.getElementById('quizContainer')    
+    Initialize resultsContainer to document.getElementById('resultsContainer')
+    Initialize resultsContainerHTML to ""
+
+    Call PopulateQuestionArray() and Set to questions
+    Call PopulateUserAnswers() and Set to userAnswers
+    Call PopulateCorrectAnswerArray() and Set to correctAnswers
+
+    Call ToggleContainerDisplay('quizContainer', 'hide', display)
+    Call ToggleContainerDisplay('resultsContainer', 'show', display)
+
+    IF quizContainer display is none AND resultsContainer display is block THEN 
+
+      Set resultsContainerHTML += ""
+      Set resultsContainerHTML += "        <table>"
+      Set resultsContainerHTML += "          <thead>"
+      Set resultsContainerHTML += "            <th>English</th>"
+      Set resultsContainerHTML += "            <th>Your Answer</th>"
+      Set resultsContainerHTML += "            <th>Correct Answer</th>"
+      Set resultsContainerHTML += "            <th>Grade</th>"
+      Set resultsContainerHTML += "          </thead>"
+      Set resultsContainerHTML += "          <tbody>"
+
+      FOR questionNumber; questionNumber < questions.length; increment questionNumber
+        
+        Call GradeUserAnswer(userAnswers[questionNumber], correctAnswers[questionNumber]) and SET to isCorrect
+
+        IF isCorrect is TRUE THEN
+          Set fontColor to green
+          Set isCorrectText to "Correct"
+          Increment translationGrade
+        ELSE 
+          Set fontColor to red
+          Set isCorrectText to "Incorrect"
+        ENDIF
+
+        Set resultsContainerHTML += "            <tr>"
+        Set resultsContainerHTML += "              <td>" + questions[questionNumber] + "</td>"
+        Set resultsContainerHTML += "              <td style=\"color: " + fontColor + ";\">" + userAnswers[questionNumber] + "</td>"
+        Set resultsContainerHTML += "              <td>" + correctAnswers[questionNumber] + "</td>"
+        Set resultsContainerHTML += "              <td style=\"color: " + fontColor + ";\">" + isCorrectText + "</td>"
+        Set resultsContainerHTML += "            </tr>"
+
+      ENDFOR
+
+      Set finalGrade = (translationGrade / questions.length) * 100
+
+      Set resultsContainerHTML += "          </tbody>"
+      Set resultsContainerHTML += "          <tfoot>"    
+      Set resultsContainerHTML += "            <tr>"
+      Set resultsContainerHTML += "              <td colspan=2></td>"
+      Set resultsContainerHTML += "              <td class=\"finalGradeText\">FINAL GRADE:</td>"
+      Set resultsContainerHTML += "              <td class=\"finalGrade\">" + finalGrade + "%</td>"
+      Set resultsContainerHTML += "            </tr>"
+      Set resultsContainerHTML += "          </tfoot>"
+      Set resultsContainerHTML += "        </table>"
+
+      Set resultsContainerHTML += "        <button id=\"resetBtn\" onclick=\"location.reload();\">Reset</button>"
+
+    ENDIF
+
+    Set resultsContainer.innerHTML += resultsContainerHTML
+
+  END
+
+
+
+
+TEST CASES: 
+
+  VARIABLES: userAnswers
+  TEST CASE 1:
+    INPUT VALUES: "Ako", "", "hindi", "hello", "PaaLaM", "  mabuti", "masaya    ", "Ngayonn"
+
+    EXPECTED RESULT:
+      English	  Your Answer	  Correct Answer  Grade
+      I	        Ako	          Ako	            Correct
+      Yes		                  Oo	            Incorrect
+      No	      hindi	        Hindi	          Correct
+      Hello	    hello	        Kumusta	        Incorrect
+      Goodbye	  PaaLaM	      Paalam	        Correct
+      He/She	  Siya	        Siya	          Correct
+      Thank You	Salamat	      Salamat	        Correct
+      Fine	    mabuti	      Mabuti	        Correct
+      Happy	    masaya	      Masaya	        Correct
+      Today	    Ngayonn	      Ngayon	        Incorrect
+                              FINAL GRADE:	  70%
+
+    ACTUAL RESULT:
+      English	  Your Answer	  Correct Answer  Grade
+      I	        Ako	          Ako	            Correct
+      Yes		                  Oo	            Incorrect
+      No	      hindi	        Hindi	          Correct
+      Hello	    hello	        Kumusta	        Incorrect
+      Goodbye	  PaaLaM	      Paalam	        Correct
+      He/She	  Siya	        Siya	          Correct
+      Thank You	Salamat	      Salamat	        Correct
+      Fine	    mabuti	      Mabuti	        Correct
+      Happy	    masaya	      Masaya	        Correct
+      Today	    Ngayonn	      Ngayon	        Incorrect
+                              FINAL GRADE:	  70%
+
+
+  TEST CASE 2:
+    INPUT VALUES: "I", "Oo", "           hindi", "kumusta", "paalam        ", "He/She", "Salamat", "what?", "gayon"
+
+    EXPECTED RESULT:
+      English	  Your Answer	  Correct Answer  Grade
+      I	        I	            Ako	            Incorrect
+      Yes	      Oo	          Oo	            Correct
+      No	      hindi	        Hindi	          Correct
+      Hello	    kumusta	      Kumusta	        Correct
+      Goodbye	  paalam	      Paalam	        Correct
+      He/She	  He/She	      Siya	          Incorrect
+      Thank You	Salamat	      Salamat	        Correct
+      Fine	    mabuti	      Mabuti	        Correct
+      Happy	    what?	        Masaya	        Incorrect
+      Today	    gayon	        Ngayon	        Incorrect
+                              FINAL GRADE:	  60%
+
+    ACTUAL RESULT:
+      English	  Your Answer	  Correct Answer  Grade
+      I	        I	            Ako	            Incorrect
+      Yes	      Oo	          Oo	            Correct
+      No	      hindi	        Hindi	          Correct
+      Hello	    kumusta	      Kumusta	        Correct
+      Goodbye	  paalam	      Paalam	        Correct
+      He/She	  He/She	      Siya	          Incorrect
+      Thank You	Salamat	      Salamat	        Correct
+      Fine	    mabuti	      Mabuti	        Correct
+      Happy	    what?	        Masaya	        Incorrect
+      Today	    gayon	        Ngayon	        Incorrect
+                              FINAL GRADE:	  60%
+    
+  TEST CASE 3:
+    INPUT VALUES: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+    EXPECTED RESULT:
+      English	  Your Answer	  Correct Answer	Grade
+      I	        1	            Ako	            Incorrect
+      Yes	      2	            Oo	            Incorrect
+      No	      3	            Hindi	          Incorrect
+      Hello	    4	            Kumusta	        Incorrect
+      Goodbye	  5	            Paalam	        Incorrect
+      He/She	  6	            Siya	          Incorrect
+      Thank You	7	            Salamat	        Incorrect
+      Fine	    8	            Mabuti	        Incorrect
+      Happy	    9	            Masaya	        Incorrect
+      Today	    10	          Ngayon	        Incorrect
+                              FINAL GRADE:	  0%
+
+    ACTUAL RESULT:
+      English	  Your Answer	  Correct Answer	Grade
+      I	        1	            Ako	            Incorrect
+      Yes	      2	            Oo	            Incorrect
+      No	      3	            Hindi	          Incorrect
+      Hello	    4	            Kumusta	        Incorrect
+      Goodbye	  5	            Paalam	        Incorrect
+      He/She	  6	            Siya	          Incorrect
+      Thank You	7	            Salamat	        Incorrect
+      Fine	    8	            Mabuti	        Incorrect
+      Happy	    9	            Masaya	        Incorrect
+      Today	    10	          Ngayon	        Incorrect
+                              FINAL GRADE:	  0%
+
+
+  TEST CASE 4:
+    INPUT VALUES: "", "", "", "", "", "", "", "", "", ""
+
+    EXPECTED RESULT:
+      English	  Your Answer	  Correct Answer	Grade
+      I		                    Ako	            Incorrect
+      Yes		                  Oo	            Incorrect
+      No		                  Hindi	          Incorrect
+      Hello		                Kumusta	        Incorrect
+      Goodbye		              Paalam	        Incorrect
+      He/She		              Siya	          Incorrect
+      Thank You		            Salamat	        Incorrect
+      Fine		                Mabuti	        Incorrect
+      Happy		                Masaya	        Incorrect
+      Today		                Ngayon	        Incorrect
+                              FINAL GRADE:	  0%
+
+    ACTUAL RESULT:
+      English	  Your Answer	  Correct Answer	Grade
+      I		                    Ako	            Incorrect
+      Yes		                  Oo	            Incorrect
+      No		                  Hindi	          Incorrect
+      Hello		                Kumusta	        Incorrect
+      Goodbye		              Paalam	        Incorrect
+      He/She		              Siya	          Incorrect
+      Thank You		            Salamat	        Incorrect
+      Fine		                Mabuti	        Incorrect
+      Happy		                Masaya	        Incorrect
+      Today		                Ngayon	        Incorrect
+                              FINAL GRADE:	  0%
+
+
+  TEST CASE 5:
+    INPUT VALUES: "Ako", "Oo", "Hindi", "Kumusta", "Paalam", "Siya", "Salamat", "Mabuti", "Masaya", "Ngayon"
+
+    EXPECTED RESULT:
+      English	  Your Answer	  Correct Answer	Grade
+      I	        Ako	          Ako	            Correct
+      Yes	      Oo	          Oo	            Correct
+      No	      Hindi	        Hindi	          Correct
+      Hello	    Kumusta	      Kumusta	        Correct
+      Goodbye	  Paalam	      Paalam	        Correct
+      He/She	  Siya	        Siya	          Correct
+      Thank You	Salamat	      Salamat	        Correct
+      Fine	    Mabuti	      Mabuti	        Correct
+      Happy	    Masaya	      Masaya	        Correct
+      Today	    Ngayon	      Ngayon	        Correct
+                              FINAL GRADE:  	100%
+
+    ACTUAL RESULT:
+          English	  Your Answer	  Correct Answer	Grade
+      I	        Ako	          Ako	            Correct
+      Yes	      Oo	          Oo	            Correct
+      No	      Hindi	        Hindi	          Correct
+      Hello	    Kumusta	      Kumusta	        Correct
+      Goodbye	  Paalam	      Paalam	        Correct
+      He/She	  Siya	        Siya	          Correct
+      Thank You	Salamat	      Salamat	        Correct
+      Fine	    Mabuti	      Mabuti	        Correct
+      Happy	    Masaya	      Masaya	        Correct
+      Today	    Ngayon	      Ngayon	        Correct
+                              FINAL GRADE:  	100%
